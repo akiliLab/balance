@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 
@@ -28,7 +27,7 @@ func main() {
 }
 
 func (s *server) ManageBalance(ctx context.Context, request *balance.BalanceRequest) (*balance.BalanceReply, error) {
-	fmt.Println("content : " + request.String())
+	// fmt.Println("content : " + request.String())
 	rep := &balance.BalanceReply{Completed: true}
 	// Storing the new balance into the database
 
