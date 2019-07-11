@@ -37,7 +37,7 @@ func main() {
 	service.Init()
 
 	// Register Handlers
-	balance.RegisterBalanceServiceHandler(service.Server(), new(handler.Balance))
+	balance.RegisterBalanceHandler(service.Server(), new(handler.Balance))
 
 	// Register Struct as Subscriber
 	micro.RegisterSubscriber("topic.go.micro.srv.balance", service.Server(), new(subscriber.Balance))
