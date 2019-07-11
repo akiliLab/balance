@@ -3,7 +3,7 @@ syntax = "proto3";
 package balance;
 
 service BalanceService {
-  rpc ManageBalance(Request) returns (Response) {}
+  rpc Check(Request) returns (Response) {}
 }
 
 message Request {

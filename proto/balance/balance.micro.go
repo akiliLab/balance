@@ -34,7 +34,7 @@ var _ server.Option
 // Client API for BalanceService service
 
 type BalanceService interface {
-	ManageBalance(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	Check(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 }
 
 type balanceService struct {
@@ -55,8 +55,8 @@ func NewBalanceService(name string, c client.Client) BalanceService {
 	}
 }
 
-func (c *balanceService) ManageBalance(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.name, "BalanceService.ManageBalance", in)
+func (c *balanceService) Check(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "BalanceService.Check", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -68,12 +68,12 @@ func (c *balanceService) ManageBalance(ctx context.Context, in *Request, opts ..
 // Server API for BalanceService service
 
 type BalanceServiceHandler interface {
-	ManageBalance(context.Context, *Request, *Response) error
+	Check(context.Context, *Request, *Response) error
 }
 
 func RegisterBalanceServiceHandler(s server.Server, hdlr BalanceServiceHandler, opts ...server.HandlerOption) error {
 	type balanceService interface {
-		ManageBalance(ctx context.Context, in *Request, out *Response) error
+		Check(ctx context.Context, in *Request, out *Response) error
 	}
 	type BalanceService struct {
 		balanceService
@@ -86,6 +86,6 @@ type balanceServiceHandler struct {
 	BalanceServiceHandler
 }
 
-func (h *balanceServiceHandler) ManageBalance(ctx context.Context, in *Request, out *Response) error {
-	return h.BalanceServiceHandler.ManageBalance(ctx, in, out)
+func (h *balanceServiceHandler) Check(ctx context.Context, in *Request, out *Response) error {
+	return h.BalanceServiceHandler.Check(ctx, in, out)
 }
