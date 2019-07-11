@@ -15,4 +15,5 @@ proto-gen:
 	protoc --micro_out=. --go_out=plugins=grpc:. ./proto/balance/*.proto
 
 docker-build:
-	docker build -t akililab/balance:v0.0.1 .
+	docker build -t registry.gitlab.com/akililab/balance:v0.0.1 .
+	docker push registry.gitlab.com/akililab/balance
