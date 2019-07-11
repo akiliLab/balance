@@ -1,35 +1,54 @@
 package main
 
 import (
-	"log"
-	"net"
+	"flag"
+	"time"
 
-	balance "github.com/ubunifupay/balance/pb"
+	"github.com/micro/go-log"
 
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+	handler "github.com/akililab/balance/handler"
+	subscriber "github.com/akililab/balance/subscriber"
+	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/service/grpc"
+
+	balance "github.com/akililab/balance/proto/balance"
 )
 
-type server struct{}
+var (
+	serverAddr string
+)
 
-func main() {
-	lis, err := net.Listen("tcp", ":5001")
-	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	balance.RegisterBalanceServiceServer(s, &server{})
-	reflection.Register(s)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("Failed to serve: %v", err)
-	}
+func init() {
+	flag.StringVar(&serverAddr, "server_address", "0.0.0.0:9080", "server address.")
+	flag.Parse()
 }
 
-func (s *server) ManageBalance(ctx context.Context, request *balance.BalanceRequest) (*balance.BalanceReply, error) {
-	// fmt.Println("content : " + request.String())
-	rep := &balance.BalanceReply{Completed: true}
-	// Storing the new balance into the database
+func main() {
 
-	return rep, nil
+	// New Service
+	service := grpc.NewService(
+		micro.Name("go.micro.srv.balance"),
+		micro.RegisterTTL(time.Second*30),
+		micro.Address(serverAddr),
+		micro.RegisterInterval(time.Second*10),
+	)
+
+	// optionally setup command line usage
+	service.Init()
+
+	// Register Handlers
+	balance.RegisterBalanceServiceHandler(service.Server(), new(handler.Balance))
+
+	// Register Struct as Subscriber
+	micro.RegisterSubscriber("topic.go.micro.srv.balance", service.Server(), new(subscriber.Balance))
+
+	// Register Function as Subscriber
+	micro.RegisterSubscriber("topic.go.micro.srv.balance", service.Server(), subscriber.Handler)
+
+	log.Logf("Service Run")
+
+	// Run server
+	if err := service.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
