@@ -25,7 +25,6 @@ func init() {
 
 func main() {
 
-
 	// New Service
 	service := grpc.NewService(
 		micro.Name("go.micro.srv.balance"),
