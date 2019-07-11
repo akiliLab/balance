@@ -4,9 +4,9 @@ go 1.12
 
 require (
 	github.com/golang/protobuf v1.3.1
-	github.com/micro/go-log v0.1.0 // indirect
-	golang.org/x/net v0.0.0-20190420063019-afa5a82059c6
-	google.golang.org/grpc v1.20.1
+	github.com/micro/go-log v0.1.0
+	github.com/micro/go-micro v1.7.0
+	google.golang.org/grpc v1.21.1
 )
 
 replace (

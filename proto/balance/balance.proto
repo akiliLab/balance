@@ -17,3 +17,5 @@ message Response {
   int64 amount = 2;
   string currency = 3;
 }
+
+message Message { string say = 1; }
