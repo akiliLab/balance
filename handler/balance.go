@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	pb "github.com/akililab/balance/proto"
+	pb "github.com/akiliLab/balancee/proto"
 )
 
 // BalanceServiceServer : server for Balance

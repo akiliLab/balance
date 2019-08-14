@@ -4,8 +4,8 @@ import (
 	"net"
 	"os"
 
-	handler "github.com/akiliLab/balance/handler"
-	pb "github.com/akiliLab/balance/proto"
+	handler "github.com/akiliLab/balancee/handler"
+	pb "github.com/akiliLab/balancee/proto"
 	runtime "github.com/banzaicloud/logrus-runtime-formatter"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
