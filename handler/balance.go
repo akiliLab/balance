@@ -3,17 +3,30 @@ package handler
 import (
 	"context"
 
-	"github.com/micro/go-log"
-
-	balance "github.com/akililab/balance/proto/balance"
+	pb "github.com/akililab/balance/proto"
 )
 
-// Balance struct defining Bank Balance
-type Balance struct{}
+// BalanceServiceServer : server for Balance
+type BalanceServiceServer struct {
+}
 
-// ManageBalance is a single request handler called via client.Call or the generated client code
-func (e *Balance) ManageBalance(ctx context.Context, req *balance.Request, rsp *balance.Response) error {
-	log.Log("Received Balance.ManageBalance request")
-	rsp.Completed = true
-	return nil
+var (
+	balance *pb.Balance
+)
+
+// Balance : Get Balance
+func (s *BalanceServiceServer) Balance(ctx context.Context, req *pb.BalanceRequest) (*pb.BalanceResponse, error) {
+	balance := pb.Balance{
+		Balance:      5000,
+		TotalBalance: 6000,
+		Currency:     "USD",
+		SpendToday:   50,
+	}
+
+	// CallGrpcService(ctx, "transcation:50051")
+	// CallGrpcService(ctx, "balance:50051")
+
+	return &pb.BalanceResponse{
+		Balance: &balance,
+	}, nil
 }

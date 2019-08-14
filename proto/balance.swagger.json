@@ -1,0 +1,65 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "proto/balance.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/balance": {
+      "get": {
+        "operationId": "Balance",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/accountBalanceResponse"
+            }
+          }
+        },
+        "tags": [
+          "BalanceService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "accountBalance": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "type": "string",
+          "format": "int64"
+        },
+        "total_balance": {
+          "type": "string",
+          "format": "int64"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "spend_today": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "accountBalanceResponse": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "$ref": "#/definitions/accountBalance"
+        }
+      }
+    }
+  }
+}

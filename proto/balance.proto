@@ -1,0 +1,23 @@
+syntax = "proto3";
+package account;
+
+import "google/api/annotations.proto";
+
+message Balance {
+  int64 balance = 1;
+  int64 total_balance = 2;
+  string currency = 3;
+  int64 spend_today = 4;
+}
+
+message BalanceRequest {}
+
+message BalanceResponse { Balance balance = 1; }
+
+service BalanceService {
+  rpc Balance(BalanceRequest) returns (BalanceResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/balance"
+    };
+  }
+}

@@ -1,54 +1,46 @@
 package main
 
 import (
-	"flag"
-	"time"
+	"net"
+	"os"
 
-	"github.com/micro/go-log"
-
-	handler "github.com/akililab/balance/handler"
-	subscriber "github.com/akililab/balance/subscriber"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/service/grpc"
-
-	balance "github.com/akililab/balance/proto/balance"
+	handler "github.com/akiliLab/balance/handler"
+	pb "github.com/akiliLab/balance/proto"
+	runtime "github.com/banzaicloud/logrus-runtime-formatter"
+	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 )
 
-var (
-	serverAddr string
+const (
+	port = ":50052"
 )
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
 
 func init() {
-	flag.StringVar(&serverAddr, "server_address", "0.0.0.0:9080", "server address.")
-	flag.Parse()
+	formatter := runtime.Formatter{ChildFormatter: &log.JSONFormatter{}}
+	formatter.Line = true
+	log.SetFormatter(&formatter)
+	log.SetOutput(os.Stdout)
+	level, err := log.ParseLevel(getEnv("LOG_LEVEL", "info"))
+	if err != nil {
+		log.Error(err)
+	}
+	log.SetLevel(level)
 }
 
 func main() {
-
-	// New Service
-	service := grpc.NewService(
-		micro.Name("go.micro.srv.balance"),
-		micro.RegisterTTL(time.Second*30),
-		micro.Address(serverAddr),
-		micro.RegisterInterval(time.Second*10),
-	)
-
-	// optionally setup command line usage
-	service.Init()
-
-	// Register Handlers
-	balance.RegisterBalanceServiceHandler(service.Server(), new(handler.Balance))
-
-	// Register Struct as Subscriber
-	micro.RegisterSubscriber("topic.go.micro.srv.balance", service.Server(), new(subscriber.Balance))
-
-	// Register Function as Subscriber
-	micro.RegisterSubscriber("topic.go.micro.srv.balance", service.Server(), subscriber.Handler)
-
-	log.Logf("Service Run")
-
-	// Run server
-	if err := service.Run(); err != nil {
-		log.Fatal(err)
+	lis, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
 	}
+
+	s := grpc.NewServer()
+	pb.RegisterBalanceServiceServer(s, &handler.BalanceServiceServer{})
+	log.Fatal(s.Serve(lis))
 }
