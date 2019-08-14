@@ -12,7 +12,13 @@ test: install
 	go test ./...
 
 proto-gen:
-	protoc --micro_out=. --descriptor_set_out=./proto/balance/balance.proto-descriptor --go_out=plugins=grpc:. ./proto/balance/*.proto
+	protoc -I /usr/local/include -I. \
+    	-I $(GOPATH)/src \
+    	-I $(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+    	--go_out=plugins=grpc:. \
+    	--grpc-gateway_out=logtostderr=true:. \
+		--swagger_out=logtostderr=true:. \
+    	./proto/*.proto
 
 docker-build:
 	docker build -t akililab/balance:v0.0.1 .
