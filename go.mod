@@ -4,9 +4,11 @@ go 1.12
 
 require (
 	github.com/golang/protobuf v1.3.1
+	github.com/grpc-ecosystem/grpc-gateway v1.9.5
 	github.com/micro/go-log v0.1.0
 	github.com/micro/go-micro v1.7.0
 	github.com/nats-io/nats-server/v2 v2.0.0 // indirect
+	google.golang.org/genproto v0.0.0-20190620144150-6af8c5fc6601
 	google.golang.org/grpc v1.21.1
 )
 

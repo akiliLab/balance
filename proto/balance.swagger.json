@@ -37,16 +37,19 @@
       "type": "object",
       "properties": {
         "balance": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "total_balance": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         },
         "currency": {
           "type": "string"
         },
         "spend_today": {
-          "type": "string"
+          "type": "string",
+          "format": "int64"
         }
       }
     },
